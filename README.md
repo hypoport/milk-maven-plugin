@@ -9,7 +9,11 @@ milk-maven-plugin
 Contributors
 =============
 
-Björn Behrens
-Eric Karge
-Timmo Freudl-Gierke
+- Eric Karge
+- Timmo Freudl-Gierke
+- Björn Behrens
 
+Links
+========
+
+- http://maven.apache.org/scm/maven-scm-plugin/diff-mojo.html
