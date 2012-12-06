@@ -26,11 +26,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.scm.manager.ScmManager;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.release.ReleaseExecutionException;
 import org.apache.maven.shared.release.ReleaseFailureException;
-import org.apache.maven.shared.release.ReleaseManager;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.apache.maven.shared.release.config.ReleaseUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -53,6 +51,13 @@ public class UpdateVersionsMojo
     extends AbstractMojo {
 
   /**
+   * @parameter default-value="${newVersion}"
+   * @required
+   * @readonly
+   */
+  private String newVersion;
+
+  /**
    * @parameter default-value="${basedir}"
    * @required
    * @readonly
@@ -73,8 +78,6 @@ public class UpdateVersionsMojo
    */
   protected MavenProject project;
 
-  /** @component */
-  protected ReleaseManager releaseManager;
   /**
    * Additional arguments to pass to the Maven executions, separated by spaces.
    *
@@ -94,62 +97,6 @@ public class UpdateVersionsMojo
    */
   private List<MavenProject> reactorProjects;
 
-  /**
-   * The {@code M2_HOME} parameter to use for forked Maven invocations.
-   *
-   * @parameter default-value="${maven.home}"
-   * @since 2.0-beta-8
-   */
-  protected File mavenHome;
-
-  /**
-   * The {@code JAVA_HOME} parameter to use for forked Maven invocations.
-   *
-   * @parameter default-value="${java.home}"
-   * @since 2.0-beta-8
-   */
-  private File javaHome;
-
-  /**
-   * The command-line local repository directory in use for this build (if specified).
-   *
-   * @parameter default-value="${maven.repo.local}"
-   * @since 2.0-beta-8
-   */
-  private File localRepoDirectory;
-
-  /**
-   * Role hint of the {@link org.apache.maven.shared.release.exec.MavenExecutor} implementation to use.
-   *
-   * @parameter expression="${mavenExecutorId}" default-value="invoker"
-   * @since 2.0-beta-8
-   */
-  private String mavenExecutorId;
-
-  /**
-   * Use a local checkout instead of doing a checkout from the upstream repository. ATTENTION: This will only work with
-   * distributed SCMs which support the file:// protocol like e.g. git, jgit or hg!
-   *
-   * TODO: we should think about having the defaults for the various SCM providers provided via modello!
-   *
-   * @parameter expression="${localCheckout}" default-value="false"
-   * @since 2.0
-   */
-  private boolean localCheckout;
-  /**
-   * Implemented with git will or not push changes to the upstream repository. <code>true</code> by default to preserve backward
-   * compatibility.
-   *
-   * @parameter expression="${pushChanges}" default-value="true"
-   * @since 2.1
-   */
-  private boolean pushChanges = true;
-  /**
-   * The SCM manager.
-   *
-   * @component
-   */
-  private ScmManager scmManager;
   /**
    * @parameter default-value="${session}"
    * @readonly
@@ -172,7 +119,7 @@ public class UpdateVersionsMojo
     try {
       for (MavenProject project : reactorProjects) {
         String projectId = ArtifactUtils.versionlessKey(project.getGroupId(), project.getArtifactId());
-        config.mapReleaseVersion(projectId, "23.0");
+        config.mapReleaseVersion(projectId, newVersion);
       }
       new PomVersionRewriter().transform(config, reactorProjects);
     }
@@ -198,9 +145,9 @@ public class UpdateVersionsMojo
 
     descriptor.setPomFileName(pomFileName);
 
-    descriptor.setLocalCheckout(localCheckout);
+    descriptor.setLocalCheckout(false);
 
-    descriptor.setPushChanges(pushChanges);
+    descriptor.setPushChanges(false);
 
     @SuppressWarnings("unchecked")
     List<Profile> profiles = project.getActiveProfiles();

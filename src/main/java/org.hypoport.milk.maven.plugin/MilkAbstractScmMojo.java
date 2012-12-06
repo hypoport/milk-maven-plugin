@@ -57,10 +57,7 @@ import java.util.Properties;
  * @version $Id: AbstractScmMojo.java 1069361 2011-02-10 12:38:18Z bentmann $
  */
 public abstract class MilkAbstractScmMojo
-    extends AbstractMojo
-{
-
-
+    extends AbstractMojo {
 
   /**
    * The version type (branch/tag/revision) of scmVersion.
@@ -89,7 +86,6 @@ public abstract class MilkAbstractScmMojo
    * @parameter expression="${startScmVersion}"
    */
   String endScmVersion;
-
 
   /**
    * The SCM connection URL.
@@ -148,8 +144,7 @@ public abstract class MilkAbstractScmMojo
   private String passphrase;
 
   /**
-   * The url of tags base directory (used by svn protocol). It is not
-   * necessary to set it if you use the standard svn layout
+   * The url of tags base directory (used by svn protocol). It is not necessary to set it if you use the standard svn layout
    * (branches/tags/trunk).
    *
    * @parameter expression="${tagBase}"
@@ -170,14 +165,12 @@ public abstract class MilkAbstractScmMojo
    */
   private String excludes;
 
-  /**
-   * @component
-   */
+  /** @component */
   private ScmManager manager;
 
   /**
-   * When this plugin requires Maven 3.0 as minimum, this component can be removed and o.a.m.s.c.SettingsDecrypter be
-   * used instead.
+   * When this plugin requires Maven 3.0 as minimum, this component can be removed and o.a.m.s.c.SettingsDecrypter be used
+   * instead.
    *
    * @component roleHint="mng-4384"
    */
@@ -210,13 +203,11 @@ public abstract class MilkAbstractScmMojo
    *
    * @parameter
    */
-  private Map<String,String> providerImplementations;
+  private Map<String, String> providerImplementations;
 
   /**
-   * Should distributed changes be pushed to the central repository?
-   * For many distributed SCMs like Git, a change like a commit
-   * is only stored in your local copy of the repository.  Pushing
-   * the change allows your to more easily share it with other users.
+   * Should distributed changes be pushed to the central repository? For many distributed SCMs like Git, a change like a commit is
+   * only stored in your local copy of the repository.  Pushing the change allows your to more easily share it with other users.
    *
    * @parameter expression="${pushChanges}" default-value="true"
    * @since 1.4
@@ -225,173 +216,140 @@ public abstract class MilkAbstractScmMojo
 
   /** {@inheritDoc} */
   public void execute()
-      throws MojoExecutionException
-  {
-    if ( systemProperties != null )
-    {
+      throws MojoExecutionException {
+    if (systemProperties != null) {
       // Add all system properties configured by the user
       Iterator<Object> iter = systemProperties.keySet().iterator();
 
-      while ( iter.hasNext() )
-      {
+      while (iter.hasNext()) {
         String key = (String) iter.next();
 
-        String value = systemProperties.getProperty( key );
+        String value = systemProperties.getProperty(key);
 
-        System.setProperty( key, value );
+        System.setProperty(key, value);
       }
     }
 
-    if ( providerImplementations != null && !providerImplementations.isEmpty() )
-    {
-      for ( Entry<String,String> entry : providerImplementations.entrySet() )
-      {
+    if (providerImplementations != null && !providerImplementations.isEmpty()) {
+      for (Entry<String, String> entry : providerImplementations.entrySet()) {
         String providerType = entry.getKey();
         String providerImplementation = entry.getValue();
         getLog().info(
             "Change the default '" + providerType + "' provider implementation to '"
-            + providerImplementation + "'." );
-        getScmManager().setScmProviderImplementation( providerType, providerImplementation );
+            + providerImplementation + "'.");
+        getScmManager().setScmProviderImplementation(providerType, providerImplementation);
       }
     }
   }
 
-  protected void setConnectionType( String connectionType )
-  {
+  protected void setConnectionType(String connectionType) {
     this.connectionType = connectionType;
   }
 
-  public String getConnectionUrl()
-  {
-    boolean requireDeveloperConnection = !"connection".equals( connectionType.toLowerCase() );
-    if ( StringUtils.isNotEmpty( connectionUrl ) && !requireDeveloperConnection )
-    {
+  public String getConnectionUrl() {
+    boolean requireDeveloperConnection = !"connection".equals(connectionType.toLowerCase());
+    if (StringUtils.isNotEmpty(connectionUrl) && !requireDeveloperConnection) {
       return connectionUrl;
     }
-    else if ( StringUtils.isNotEmpty( developerConnectionUrl ) )
-    {
+    else if (StringUtils.isNotEmpty(developerConnectionUrl)) {
       return developerConnectionUrl;
     }
-    if ( requireDeveloperConnection )
-    {
-      throw new NullPointerException( "You need to define a developerConnectionUrl parameter" );
+    if (requireDeveloperConnection) {
+      throw new NullPointerException("You need to define a developerConnectionUrl parameter");
     }
-    else
-    {
-      throw new NullPointerException( "You need to define a connectionUrl parameter" );
+    else {
+      throw new NullPointerException("You need to define a connectionUrl parameter");
     }
   }
 
-  public void setConnectionUrl( String connectionUrl )
-  {
+  public void setConnectionUrl(String connectionUrl) {
     this.connectionUrl = connectionUrl;
   }
 
-  public File getWorkingDirectory()
-  {
-    if ( workingDirectory == null )
-    {
+  public File getWorkingDirectory() {
+    if (workingDirectory == null) {
       return basedir;
     }
 
     return workingDirectory;
   }
 
-  public void setWorkingDirectory( File workingDirectory )
-  {
+  public void setWorkingDirectory(File workingDirectory) {
     this.workingDirectory = workingDirectory;
   }
 
-  public ScmManager getScmManager()
-  {
+  public ScmManager getScmManager() {
     return manager;
   }
 
   public ScmFileSet getFileSet()
-      throws IOException
-  {
-    if ( includes != null || excludes != null )
-    {
-      return new ScmFileSet( getWorkingDirectory(), includes, excludes );
+      throws IOException {
+    if (includes != null || excludes != null) {
+      return new ScmFileSet(getWorkingDirectory(), includes, excludes);
     }
-    else
-    {
-      return new ScmFileSet( getWorkingDirectory() );
+    else {
+      return new ScmFileSet(getWorkingDirectory());
     }
   }
 
   public ScmRepository getScmRepository()
-      throws ScmException
-  {
+      throws ScmException {
     ScmRepository repository;
 
-    try
-    {
-      repository = getScmManager().makeScmRepository( getConnectionUrl() );
+    try {
+      repository = getScmManager().makeScmRepository(getConnectionUrl());
 
       ScmProviderRepository providerRepo = repository.getProviderRepository();
 
-      providerRepo.setPushChanges( pushChanges );
+      providerRepo.setPushChanges(pushChanges);
 
-      if ( !StringUtils.isEmpty( username ) )
-      {
-        providerRepo.setUser( username );
+      if (!StringUtils.isEmpty(username)) {
+        providerRepo.setUser(username);
       }
 
-      if ( !StringUtils.isEmpty( password ) )
-      {
-        providerRepo.setPassword( password );
+      if (!StringUtils.isEmpty(password)) {
+        providerRepo.setPassword(password);
       }
 
-      if ( repository.getProviderRepository() instanceof ScmProviderRepositoryWithHost )
-      {
+      if (repository.getProviderRepository() instanceof ScmProviderRepositoryWithHost) {
         ScmProviderRepositoryWithHost repo = (ScmProviderRepositoryWithHost) repository.getProviderRepository();
 
-        loadInfosFromSettings( repo );
+        loadInfosFromSettings(repo);
 
-        if ( !StringUtils.isEmpty( username ) )
-        {
-          repo.setUser( username );
+        if (!StringUtils.isEmpty(username)) {
+          repo.setUser(username);
         }
 
-        if ( !StringUtils.isEmpty( password ) )
-        {
-          repo.setPassword( password );
+        if (!StringUtils.isEmpty(password)) {
+          repo.setPassword(password);
         }
 
-        if ( !StringUtils.isEmpty( privateKey ) )
-        {
-          repo.setPrivateKey( privateKey );
+        if (!StringUtils.isEmpty(privateKey)) {
+          repo.setPrivateKey(privateKey);
         }
 
-        if ( !StringUtils.isEmpty( passphrase ) )
-        {
-          repo.setPassphrase( passphrase );
+        if (!StringUtils.isEmpty(passphrase)) {
+          repo.setPassphrase(passphrase);
         }
       }
 
-      if ( !StringUtils.isEmpty( tagBase ) && repository.getProvider().equals( "svn" ) )
-      {
+      if (!StringUtils.isEmpty(tagBase) && repository.getProvider().equals("svn")) {
         SvnScmProviderRepository svnRepo = (SvnScmProviderRepository) repository.getProviderRepository();
 
-        svnRepo.setTagBase( tagBase );
+        svnRepo.setTagBase(tagBase);
       }
     }
-    catch ( ScmRepositoryException e )
-    {
-      if ( !e.getValidationMessages().isEmpty() )
-      {
-        for ( String message : e.getValidationMessages() )
-        {
-          getLog().error( message );
+    catch (ScmRepositoryException e) {
+      if (!e.getValidationMessages().isEmpty()) {
+        for (String message : e.getValidationMessages()) {
+          getLog().error(message);
         }
       }
 
-      throw new ScmException( "Can't load the scm provider.", e );
+      throw new ScmException("Can't load the scm provider.", e);
     }
-    catch ( Exception e )
-    {
-      throw new ScmException( "Can't load the scm provider.", e );
+    catch (Exception e) {
+      throw new ScmException("Can't load the scm provider.", e);
     }
 
     return repository;
@@ -402,174 +360,141 @@ public abstract class MilkAbstractScmMojo
    *
    * @param repo not null
    */
-  private void loadInfosFromSettings( ScmProviderRepositoryWithHost repo )
-  {
-    if ( username == null || password == null )
-    {
+  private void loadInfosFromSettings(ScmProviderRepositoryWithHost repo) {
+    if (username == null || password == null) {
       String host = repo.getHost();
 
       int port = repo.getPort();
 
-      if ( port > 0 )
-      {
+      if (port > 0) {
         host += ":" + port;
       }
 
-      Server server = this.settings.getServer( host );
+      Server server = this.settings.getServer(host);
 
-      if ( server != null )
-      {
-        if ( username == null )
-        {
+      if (server != null) {
+        if (username == null) {
           username = server.getUsername();
         }
 
-        if ( password == null )
-        {
-          password = decrypt( server.getPassword(), host );
+        if (password == null) {
+          password = decrypt(server.getPassword(), host);
         }
 
-        if ( privateKey == null )
-        {
+        if (privateKey == null) {
           privateKey = server.getPrivateKey();
         }
 
-        if ( passphrase == null )
-        {
-          passphrase = decrypt( server.getPassphrase(), host );
+        if (passphrase == null) {
+          passphrase = decrypt(server.getPassphrase(), host);
         }
       }
     }
   }
 
-  private String decrypt( String str, String server )
-  {
-    try
-    {
-      return secDispatcher.decrypt( str );
+  private String decrypt(String str, String server) {
+    try {
+      return secDispatcher.decrypt(str);
     }
-    catch ( SecDispatcherException e )
-    {
-      getLog().warn( "Failed to decrypt password/passphrase for server " + server + ", using auth token as is" );
+    catch (SecDispatcherException e) {
+      getLog().warn("Failed to decrypt password/passphrase for server " + server + ", using auth token as is");
       return str;
     }
   }
 
-  public void checkResult( ScmResult result )
-      throws MojoExecutionException
-  {
-    if ( !result.isSuccess() )
-    {
-      getLog().error( "Provider message:" );
+  public void checkResult(ScmResult result)
+      throws MojoExecutionException {
+    if (!result.isSuccess()) {
+      getLog().error("Provider message:");
 
-      getLog().error( result.getProviderMessage() == null ? "" : result.getProviderMessage() );
+      getLog().error(result.getProviderMessage() == null ? "" : result.getProviderMessage());
 
-      getLog().error( "Command output:" );
+      getLog().error("Command output:");
 
-      getLog().error( result.getCommandOutput() == null ? "" : result.getCommandOutput() );
+      getLog().error(result.getCommandOutput() == null ? "" : result.getCommandOutput());
 
       throw new MojoExecutionException(
-          "Command failed." + StringUtils.defaultString( result.getProviderMessage() ) );
+          "Command failed." + StringUtils.defaultString(result.getProviderMessage()));
     }
   }
 
-  public String getIncludes()
-  {
+  public String getIncludes() {
     return includes;
   }
 
-  public void setIncludes( String includes )
-  {
+  public void setIncludes(String includes) {
     this.includes = includes;
   }
 
-  public String getExcludes()
-  {
+  public String getExcludes() {
     return excludes;
   }
 
-  public void setExcludes( String excludes )
-  {
+  public void setExcludes(String excludes) {
     this.excludes = excludes;
   }
 
-  public ScmVersion getScmVersion( String versionType, String version )
-      throws MojoExecutionException
-  {
-    if ( StringUtils.isEmpty( versionType ) && StringUtils.isNotEmpty( version ) )
-    {
-      throw new MojoExecutionException( "You must specify the version type." );
+  public ScmVersion getScmVersion(String versionType, String version)
+      throws MojoExecutionException {
+    if (StringUtils.isEmpty(versionType) && StringUtils.isNotEmpty(version)) {
+      throw new MojoExecutionException("You must specify the version type.");
     }
 
-    if ( StringUtils.isEmpty( version ) )
-    {
+    if (StringUtils.isEmpty(version)) {
       return null;
     }
 
-    if ( "branch".equals( versionType ) )
-    {
-      return new ScmBranch( version );
+    if ("branch".equals(versionType)) {
+      return new ScmBranch(version);
     }
 
-    if ( "tag".equals( versionType ) )
-    {
-      return new ScmTag( version );
+    if ("tag".equals(versionType)) {
+      return new ScmTag(version);
     }
 
-    if ( "revision".equals( versionType ) )
-    {
-      return new ScmRevision( version );
+    if ("revision".equals(versionType)) {
+      return new ScmRevision(version);
     }
 
-    throw new MojoExecutionException( "Unknown '" + versionType + "' version type." );
+    throw new MojoExecutionException("Unknown '" + versionType + "' version type.");
   }
 
-  protected void handleExcludesIncludesAfterCheckoutAndExport( File checkoutDirectory )
-      throws MojoExecutionException
-  {
+  protected void handleExcludesIncludesAfterCheckoutAndExport(File checkoutDirectory)
+      throws MojoExecutionException {
     List<String> includes = new ArrayList<String>();
 
-    if ( ! StringUtils.isBlank( this.getIncludes() ) )
-    {
-      String[] tokens = StringUtils.split( this.getIncludes(), "," );
-      for ( int i = 0; i < tokens.length; ++i )
-      {
-        includes.add( tokens[i] );
+    if (!StringUtils.isBlank(this.getIncludes())) {
+      String[] tokens = StringUtils.split(this.getIncludes(), ",");
+      for (int i = 0; i < tokens.length; ++i) {
+        includes.add(tokens[i]);
       }
     }
 
     List<String> excludes = new ArrayList<String>();
 
-    if ( ! StringUtils.isBlank( this.getExcludes() ) )
-    {
-      String[] tokens = StringUtils.split( this.getExcludes(), "," );
-      for ( int i = 0; i < tokens.length; ++i )
-      {
-        excludes.add( tokens[i] );
+    if (!StringUtils.isBlank(this.getExcludes())) {
+      String[] tokens = StringUtils.split(this.getExcludes(), ",");
+      for (int i = 0; i < tokens.length; ++i) {
+        excludes.add(tokens[i]);
       }
     }
 
-    if ( includes.isEmpty() &&  excludes.isEmpty() )
-    {
+    if (includes.isEmpty() && excludes.isEmpty()) {
       return;
     }
 
     FileSetManager fileSetManager = new FileSetManager();
 
     FileSet fileset = new FileSet();
-    fileset.setDirectory( checkoutDirectory.getAbsolutePath() );
-    fileset.setIncludes( excludes );//revert the order to do the delete
-    fileset.setExcludes( includes );
-    fileset.setUseDefaultExcludes( false );
+    fileset.setDirectory(checkoutDirectory.getAbsolutePath());
+    fileset.setIncludes(excludes);//revert the order to do the delete
+    fileset.setExcludes(includes);
 
-    try
-    {
-      fileSetManager.delete( fileset );
+    try {
+      fileSetManager.delete(fileset);
     }
-    catch ( IOException e )
-    {
-      throw new MojoExecutionException( "Error found while cleaning up output directory base on excludes/includes configurations.", e );
+    catch (IOException e) {
+      throw new MojoExecutionException("Error found while cleaning up output directory base on excludes/includes configurations.", e);
     }
-
   }
 }
