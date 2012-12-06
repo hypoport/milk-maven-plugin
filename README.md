@@ -1,10 +1,10 @@
 milk-maven-plugin
 =================
 
-# Detect VCS Changes (git) and the maven modules
-# Find dependent maven modules
-# Increment Version of found modules
-# Modifiy reactor to build / test / ... only changed and dependent modules
+1. Detect VCS Changes (git) and the maven modules
+2. Find dependent maven modules
+3. Increment Version of found modules
+4. Modifiy reactor to build / test / ... only changed and dependent modules
 
 Contributors
 =============
