@@ -3,6 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+
+  <parent>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-plugins</artifactId>
+    <version>22</version>
+  </parent>
+
   <groupId>org.hypoport.milk-maven-plugin</groupId>
   <artifactId>milk-maven-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -12,14 +19,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-scm-plugin</artifactId>
       <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
@@ -32,6 +39,28 @@
       <version>1.9.0</version>
     </dependency>
 
+    <!--<dependency>-->
+    <!--<groupId>org.apache.maven.scm</groupId>-->
+    <!--<artifactId>maven-scm-providers-standard</artifactId>-->
+    <!--<version>1.6</version>-->
+    <!--<type>pom</type>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>org.apache.maven.scm</groupId>-->
+    <!--<artifactId>maven-scm-provider-local</artifactId>-->
+    <!--<version>1.6</version>-->
+    <!--</dependency>-->
+    <!--&lt;!&ndash; This is used directly by the mojo &ndash;&gt;-->
+    <!--<dependency>-->
+    <!--<groupId>org.apache.maven.scm</groupId>-->
+    <!--<artifactId>maven-scm-provider-svn-commons</artifactId>-->
+    <!--<version>1.6</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>org.apache.maven.scm</groupId>-->
+    <!--<artifactId>maven-scm-manager-plexus</artifactId>-->
+    <!--<version>1.6</version>-->
+    <!--</dependency>-->
   </dependencies>
 
 </project>

@@ -10,9 +10,8 @@ import org.apache.maven.scm.repository.ScmRepository;
 import java.io.IOException;
 
 /**
- * Goal which touches a timestamp file.
- *
  * @goal diff
+ * @aggregator
  */
 public class DiffMojo extends AbstractScmMojo {
 
