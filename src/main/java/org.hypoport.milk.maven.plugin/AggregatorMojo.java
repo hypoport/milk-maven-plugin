@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Goal which touches a timestamp file.
  *
- * @goal aggro
+ * @goal aggregator
  * @aggregator
  * @requiresDependencyResolution
  */
