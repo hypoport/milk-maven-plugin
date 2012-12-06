@@ -33,8 +33,6 @@ import org.apache.maven.shared.release.ReleaseFailureException;
 import org.apache.maven.shared.release.ReleaseManager;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
 import org.apache.maven.shared.release.config.ReleaseUtils;
-import org.apache.maven.shared.release.env.DefaultReleaseEnvironment;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -176,7 +174,7 @@ public class UpdateVersionsMojo
         String projectId = ArtifactUtils.versionlessKey(project.getGroupId(), project.getArtifactId());
         config.mapReleaseVersion(projectId, "23.0");
       }
-      new PomVersionRewriter().transform(config, getReleaseEnvironment(), reactorProjects);
+      new PomVersionRewriter().transform(config, reactorProjects);
     }
     catch (ReleaseExecutionException e) {
       throw new MojoExecutionException(e.getMessage(), e);
@@ -184,19 +182,6 @@ public class UpdateVersionsMojo
     catch (ReleaseFailureException e) {
       throw new MojoFailureException(e.getMessage(), e);
     }
-  }
-
-  /**
-   * Gets the enviroment settings configured for this release.
-   *
-   * @return The release environment, never <code>null</code>.
-   */
-  protected ReleaseEnvironment getReleaseEnvironment() {
-    return new DefaultReleaseEnvironment().setSettings(settings)
-        .setJavaHome(javaHome)
-        .setMavenHome(mavenHome)
-        .setLocalRepositoryDirectory(localRepoDirectory)
-        .setMavenExecutorId(mavenExecutorId);
   }
 
   /**

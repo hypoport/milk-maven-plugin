@@ -8,7 +8,6 @@ import org.apache.maven.shared.release.ReleaseExecutionException;
 import org.apache.maven.shared.release.ReleaseFailureException;
 import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
 import org.apache.maven.shared.release.util.ReleaseUtil;
 import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.interpolation.MapBasedValueSource;
@@ -50,18 +49,18 @@ public class PomVersionRewriter {
 
   private String ls = ReleaseUtil.LS;
 
-  public void transform(ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+  public void transform(ReleaseDescriptor releaseDescriptor,
                         List<MavenProject> reactorProjects)
       throws ReleaseExecutionException, ReleaseFailureException {
     ReleaseResult result = new ReleaseResult();
     for (MavenProject project : reactorProjects) {
-      transformProject(project, releaseDescriptor, releaseEnvironment, reactorProjects, result);
+      transformProject(project, releaseDescriptor, reactorProjects, result);
     }
     result.setResultCode(ReleaseResult.SUCCESS);
   }
 
   private void transformProject(MavenProject project, ReleaseDescriptor releaseDescriptor,
-                                ReleaseEnvironment releaseEnvironment, List<MavenProject> reactorProjects,
+                                List<MavenProject> reactorProjects,
                                 ReleaseResult result)
       throws ReleaseExecutionException, ReleaseFailureException {
     Document document;
