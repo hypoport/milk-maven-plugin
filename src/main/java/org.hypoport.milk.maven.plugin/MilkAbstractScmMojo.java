@@ -59,6 +59,38 @@ import java.util.Properties;
 public abstract class MilkAbstractScmMojo
     extends AbstractMojo
 {
+
+
+
+  /**
+   * The version type (branch/tag/revision) of scmVersion.
+   *
+   * @parameter expression="${startScmVersionType}"
+   */
+  String startScmVersionType;
+
+  /**
+   * The version (revision number/branch name/tag name).
+   *
+   * @parameter expression="${startScmVersion}"
+   */
+  String startScmVersion;
+
+  /**
+   * The version type (branch/tag/revision) of scmVersion.
+   *
+   * @parameter expression="${endScmVersionType}"
+   */
+  String endScmVersionType;
+
+  /**
+   * The version (revision number/branch name/tag name).
+   *
+   * @parameter expression="${startScmVersion}"
+   */
+  String endScmVersion;
+
+
   /**
    * The SCM connection URL.
    *

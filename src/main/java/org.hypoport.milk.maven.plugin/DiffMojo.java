@@ -20,7 +20,9 @@ public class DiffMojo extends MilkAbstractScmMojo {
     try {
       ScmRepository repository = getScmRepository();
 
-      DiffScmResult result = getScmManager().diff(repository, getFileSet(), null, null);
+      DiffScmResult result = getScmManager().diff(repository, getFileSet(),
+                                                  getScmVersion(startScmVersionType, startScmVersion),
+                                                  getScmVersion(endScmVersionType, endScmVersion));
 
       getLog().info("Changed Files:");
       for (ScmFile scmFile : result.getChangedFiles()) {
