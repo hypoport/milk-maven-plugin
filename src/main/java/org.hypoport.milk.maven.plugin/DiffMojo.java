@@ -4,7 +4,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.scm.ScmException;
 import org.apache.maven.scm.ScmFile;
 import org.apache.maven.scm.command.diff.DiffScmResult;
-import org.apache.maven.scm.plugin.AbstractScmMojo;
 import org.apache.maven.scm.repository.ScmRepository;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.io.IOException;
  * @goal diff
  * @aggregator
  */
-public class DiffMojo extends AbstractScmMojo {
+public class DiffMojo extends MilkAbstractScmMojo {
 
   public void execute() throws MojoExecutionException {
     super.execute();
