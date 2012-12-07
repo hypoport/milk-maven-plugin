@@ -17,12 +17,12 @@ public class ModuleMatcherTest_match_single_File {
 
   @BeforeMethod
   protected void setUp() throws Exception {
-    matcher = new ModuleMatcher();
+    matcher = new ModuleMatcher(new File("/project/"));
   }
 
   @Test
   public void ein_passendes_Artifakt() throws Exception {
-    Artifact artifact = artifactForPath("hello/pom.xml");
+    Artifact artifact = artifactForPath("/project/hello/pom.xml");
 
     Artifact result = matcher.match(asList(artifact), "hello/world");
 
@@ -32,15 +32,15 @@ public class ModuleMatcherTest_match_single_File {
   @Test
   public void kein_passendes_Artifakt() throws Exception {
 
-    Artifact result = matcher.match(asList(artifactForPath("nein/pom.xml"), artifactForPath("auch nicht/pom.xml")), "hello/world");
+    Artifact result = matcher.match(asList(artifactForPath("/project/nein/pom.xml"), artifactForPath("/project/auch nicht/pom.xml")), "hello/world");
 
     assertThat(result).isNull();
   }
 
   @Test
   public void Parent_and_child_Module() throws Exception {
-    Artifact parent = artifactForPath("parent/pom.xml");
-    Artifact child = artifactForPath("parent/child/pom.xml");
+    Artifact parent = artifactForPath("/project/parent/pom.xml");
+    Artifact child = artifactForPath("/project/parent/child/pom.xml");
 
     Artifact result = matcher.match(asList(parent, child), "parent/child/path/to/file");
 
@@ -49,8 +49,8 @@ public class ModuleMatcherTest_match_single_File {
 
   @Test
   public void siblings_Module() throws Exception {
-    Artifact artifact = artifactForPath("artifact/pom.xml");
-    Artifact sibling = artifactForPath("artifactSibling/pom.xml");
+    Artifact artifact = artifactForPath("/project/artifact/pom.xml");
+    Artifact sibling = artifactForPath("/project/artifactSibling/pom.xml");
 
     Artifact result = matcher.match(asList(artifact, sibling), "artifact/path/to/file");
 
@@ -59,10 +59,10 @@ public class ModuleMatcherTest_match_single_File {
 
   @Test
   public void viele_Module() throws Exception {
-    Artifact parent = artifactForPath("parent/pom.xml");
-    Artifact child = artifactForPath("parent/child/pom.xml");
-    Artifact grandChild = artifactForPath("parent/child/child/pom.xml");
-    Artifact sibling = artifactForPath("parent/sibling/pom.xml");
+    Artifact parent = artifactForPath("/project/parent/pom.xml");
+    Artifact child = artifactForPath("/project/parent/child/pom.xml");
+    Artifact grandChild = artifactForPath("/project/parent/child/child/pom.xml");
+    Artifact sibling = artifactForPath("/project/parent/sibling/pom.xml");
 
     Artifact result = matcher.match(asList(child, grandChild, parent, sibling), "parent/child/child/path/to/file");
 

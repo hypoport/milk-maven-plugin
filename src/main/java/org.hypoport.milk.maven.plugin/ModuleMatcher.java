@@ -4,6 +4,7 @@ import org.apache.maven.artifact.Artifact;
 import org.sonatype.aether.RepositorySystem;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,11 @@ public class ModuleMatcher {
 
   @Inject
   String projectGroupId;
+  private File basedir;
+
+  public ModuleMatcher(File basedir) {
+    this.basedir = basedir;
+  }
 
   public Set<Artifact> match(Iterable<Artifact> artifacts, Iterable<String> files) {
     Set<Artifact> result = new HashSet<Artifact>();
@@ -31,6 +37,9 @@ public class ModuleMatcher {
   public Artifact match(Iterable<Artifact> artifacts, String path) {
     Artifact owner = null;
     for (Artifact artifact : artifacts) {
+      if (!path.startsWith("/")) {
+        path = basedir.getPath().toString() + "/" + path;
+      }
       if (path.startsWith(artifact.getFile().getParent() + '/')) {
         if (owner == null || artifact.getFile().getParent().startsWith(owner.getFile().getParent())) {
           owner = artifact;
