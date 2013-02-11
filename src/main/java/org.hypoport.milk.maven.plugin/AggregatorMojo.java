@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Goal which touches a timestamp file.
- *
  * @goal aggregator
  * @aggregator
  * @requiresDependencyResolution
  */
 public class AggregatorMojo extends AbstractMojo {
 
-  /** @component */
+  /**
+   * @component
+   */
   ArtifactMetadataSource metadataSource;
 
   /**
@@ -52,10 +52,14 @@ public class AggregatorMojo extends AbstractMojo {
    */
   List<MavenProject> reactorProjects;
 
-  /** @parameter default-value="${localRepository}" */
+  /**
+   * @parameter default-value="${localRepository}"
+   */
   private ArtifactRepository localRepository;
 
-  /** @parameter default-value="${project.remoteArtifactRepositories}" */
+  /**
+   * @parameter default-value="${project.remoteArtifactRepositories}"
+   */
   private List<ArtifactRepository> remoteRepositories;
 
   @Override
