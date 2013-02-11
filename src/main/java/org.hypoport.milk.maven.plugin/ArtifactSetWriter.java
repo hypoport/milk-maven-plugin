@@ -31,7 +31,11 @@ public class ArtifactSetWriter {
   }
 
   private String relativeModulePath(Artifact artifact) {
-    return artifact.getFile().getParent().substring(this.basedir.getPath().length() + 1);
+    String path = artifact.getFile().getParent();
+    if (basedir.getPath().equals(path)) {
+      return ".";
+    }
+    return path.substring(this.basedir.getPath().length() + 1);
   }
 
   private boolean prependCommaIfNotFirstEntry(BufferedWriter writer, boolean first) throws IOException {
