@@ -1,22 +1,17 @@
 package org.hypoport.milk.maven.plugin;
 
 import org.apache.maven.artifact.Artifact;
-import org.sonatype.aether.RepositorySystem;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-/** @goal dump-module-paths */
+/**
+ * @goal dump-module-paths
+ */
 @SuppressWarnings("unchecked")
 public class ModuleMatcher {
 
-  @Inject
-  RepositorySystem repositorySystem;
-
-  @Inject
-  String projectGroupId;
   private File basedir;
 
   public ModuleMatcher(File basedir) {
