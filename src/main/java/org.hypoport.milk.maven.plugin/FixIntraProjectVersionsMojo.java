@@ -24,7 +24,7 @@ import java.util.List;
  * @goal fix-intra-project-dependencies
  * @since 2.0
  */
-public class FixIntraProjectVersions extends AbstractVersionsUpdaterMojo {
+public class FixIntraProjectVersionsMojo extends AbstractVersionsUpdaterMojo {
   /**
    * @parameter default-value="${reactorProjects}"
    * @required
@@ -41,7 +41,7 @@ public class FixIntraProjectVersions extends AbstractVersionsUpdaterMojo {
       throws MojoExecutionException, MojoFailureException {
 
     for (MavenProject project : reactorProjects) {
-      versionChanges.add(new VersionChange(project.getGroupId(), project.getArtifactId(), null, project.getVersion()));
+      versionChanges.add(new VersionChange(project.getGroupId(), project.getArtifactId(), "", project.getVersion()));
     }
     for (MavenProject project : reactorProjects) {
       process(project.getFile());
