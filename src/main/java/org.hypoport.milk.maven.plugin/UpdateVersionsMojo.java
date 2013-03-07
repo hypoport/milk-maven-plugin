@@ -44,7 +44,6 @@ import java.util.List;
 public class UpdateVersionsMojo
     extends AbstractVersionsUpdaterMojo {
 
-  private final List<VersionChange> versionChanges = new ArrayList<VersionChange>();
   /**
    * @parameter default-value="${newVersion}"
    * @required
