@@ -19,11 +19,9 @@ package org.hypoport.milk.maven.plugin;
  * under the License.
  */
 
-import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.mojo.versions.AbstractVersionsUpdaterMojo;
 import org.codehaus.mojo.versions.api.PomHelper;
 import org.codehaus.mojo.versions.change.VersionChange;
 import org.codehaus.mojo.versions.change.VersionChanger;
@@ -53,12 +51,6 @@ public class UpdateVersionsMojo
    * @readonly
    */
   private String newVersion;
-  /**
-   * @parameter default-value="${reactorProjects}"
-   * @required
-   * @readonly
-   */
-  private List<MavenProject> reactorProjects;
 
   /**
    * {@inheritDoc}
@@ -69,26 +61,11 @@ public class UpdateVersionsMojo
     for (MavenProject project : reactorProjects) {
       versionChanges.add(new VersionChange(project.getGroupId(), project.getArtifactId(), "", newVersion));
     }
-    for (MavenProject project : reactorProjects) {
-      process(project.getFile());
-    }
+    process();
   }
 
   @Override
-  protected void update(ModifiedPomXMLEventReader pom) throws MojoExecutionException, XMLStreamException {
-    try {
-      final VersionChanger changer = createVersionChanger(pom);
-
-      for (VersionChange change : versionChanges) {
-        changer.apply(change);
-      }
-    }
-    catch (IOException e) {
-      throw new MojoExecutionException(e.getMessage(), e);
-    }
-  }
-
-  private VersionChanger createVersionChanger(ModifiedPomXMLEventReader pom) throws IOException {
+  protected VersionChanger createVersionChanger(ModifiedPomXMLEventReader pom) throws IOException {
     final VersionChangerFactory changerFactory = new VersionChangerFactory();
     changerFactory.setPom(pom);
     changerFactory.setLog(getLog());
