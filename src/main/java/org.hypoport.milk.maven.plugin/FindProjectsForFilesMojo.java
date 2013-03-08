@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @goal aggregator
+ * @goal find-projects-for-files
  * @aggregator
  * @requiresDependencyResolution
  */
-public class AggregatorMojo extends AbstractMojo {
+public class FindProjectsForFilesMojo extends AbstractMojo {
 
   /**
-   * @parameter expression="${changeSet}"
+   * @parameter expression="${files}"
    * @required
    */
-  File changeSet;
+  File files;
 
   /**
    * @parameter expression="${outputFile}"
@@ -48,11 +48,11 @@ public class AggregatorMojo extends AbstractMojo {
 
   private List<String> readChangeSet() throws MojoFailureException {
     try {
-      final BufferedReader reader = new BufferedReader(new FileReader(changeSet));
+      final BufferedReader reader = new BufferedReader(new FileReader(files));
       return new ChangeSetReader(reader).read();
     }
     catch (IOException e) {
-      throw new MojoFailureException("Failed reading changeset: " + changeSet, e);
+      throw new MojoFailureException("Failed reading changeset: " + files, e);
     }
   }
 
