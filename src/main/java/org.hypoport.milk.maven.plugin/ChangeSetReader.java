@@ -1,18 +1,21 @@
 package org.hypoport.milk.maven.plugin;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeSetReader {
 
-  List<String> readChangeSet(File changeSet) throws IOException {
+  private BufferedReader reader;
+
+  public ChangeSetReader(BufferedReader reader) throws FileNotFoundException {
+    this.reader = reader;
+  }
+
+  List<String> read() throws IOException {
     ArrayList<String> changes = new ArrayList<String>();
-    BufferedReader reader = createReader(changeSet);
     try {
       String line;
       while ((line = reader.readLine()) != null) {
@@ -25,7 +28,4 @@ public class ChangeSetReader {
     }
   }
 
-  private BufferedReader createReader(File changeSet) throws FileNotFoundException {
-    return new BufferedReader(new FileReader(changeSet));
-  }
 }

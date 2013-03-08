@@ -55,8 +55,7 @@ public abstract class AbstractVersionsUpdaterMojo
    */
   protected List<MavenProject> reactorProjects;
 
-  protected void process
-      () throws MojoFailureException, MojoExecutionException {
+  protected void process() throws MojoFailureException, MojoExecutionException {
     for (MavenProject project : reactorProjects) {
       process(project.getFile());
     }
