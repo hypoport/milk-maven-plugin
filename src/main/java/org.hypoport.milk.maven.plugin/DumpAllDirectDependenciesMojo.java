@@ -1,5 +1,6 @@
 package org.hypoport.milk.maven.plugin;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -11,10 +12,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @goal dump-reactor
+ * @goal dump-all-direct-dependencies
  * @aggregator
  */
-public class DumpReactorMojo extends AbstractMojo {
+public class DumpAllDirectDependenciesMojo extends AbstractMojo {
 
   /** @parameter expression="${pattern}" */
   String pattern;
@@ -35,23 +36,30 @@ public class DumpReactorMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException, MojoFailureException {
     String output = "";
     if (pattern == null) {
-      pattern = "%g:%a:%v";
+      pattern = "%g:%a:%t:%v";
     }
     if (delimiter == null) {
       delimiter = ",";
     }
-    ProjectFormatter projectFormatter = new ProjectFormatter(pattern);
+    DependencyFormatter dependencyFormatter = new DependencyFormatter(pattern);
     for (MavenProject project : reactorProjects) {
-      output += delimiter + projectFormatter.formatProject(project);
+      output += addProjectDependencies(output, dependencyFormatter, project);
     }
     if (!output.isEmpty()) {
       write(output.substring(delimiter.length()));
     }
   }
 
+  private String addProjectDependencies(String output, DependencyFormatter dependencyFormatter, MavenProject project) throws MojoExecutionException {
+    for (Dependency dependency : project.getDependencies()) {
+      output += delimiter + dependencyFormatter.formatDependency(dependency);
+    }
+    return output;
+  }
+
   private void write(String output) throws MojoExecutionException {
     if (outputFile == null) {
-      getLog().info("reactor-dump: " + output);
+      getLog().info("dependency-dump: " + output);
     }
     else {
       FileWriter writer;
