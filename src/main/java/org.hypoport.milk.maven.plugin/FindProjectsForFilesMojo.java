@@ -5,14 +5,18 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @goal find-projects-for-files
  * @aggregator
- * @requiresDependencyResolution
  */
 public class FindProjectsForFilesMojo extends AbstractMojo {
 

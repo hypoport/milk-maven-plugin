@@ -1,17 +1,11 @@
 package org.hypoport.milk.maven.plugin;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-/**
- * @goal dump-module-paths
- */
-@SuppressWarnings("unchecked")
 public class ProjectMatcher {
 
   private File basedir;

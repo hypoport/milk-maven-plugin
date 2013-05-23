@@ -5,36 +5,24 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * @goal dump-reactor
  * @aggregator
- * @requiresDependencyResolution
  */
 public class DumpReactorMojo extends AbstractMojo {
 
-  /**
-   * @parameter expression="${pattern}"
-   */
+  /** @parameter expression="${pattern}" */
   String pattern;
 
-  /**
-   * @parameter expression="${delimiter}"
-   */
+  /** @parameter expression="${delimiter}" */
   String delimiter;
 
-  /**
-   * @parameter expression="${outputFile}"
-   */
+  /** @parameter expression="${outputFile}" */
   File outputFile;
 
   /**
@@ -52,23 +40,13 @@ public class DumpReactorMojo extends AbstractMojo {
     if (delimiter == null) {
       delimiter = ",";
     }
+    ProjectFormatter projectFormatter = new ProjectFormatter(pattern);
     for (MavenProject project : reactorProjects) {
-      String projectString = formatProject(project);
+      String projectString = projectFormatter.formatProject(project);
       output += delimiter;
       output += projectString;
     }
     write(output.substring(delimiter.length()));
-  }
-
-  private String formatProject(MavenProject project) {
-    String result = pattern.replaceAll("%g", project.getGroupId());
-    result = result.replaceAll("%a", project.getArtifactId());
-    result = result.replaceAll("%v", project.getVersion());
-    result = result.replaceAll("%n", project.getName());
-    result = result.replaceAll("%p", project.getPackaging());
-    result = result.replaceAll("%f", project.getFile().getPath());
-    result = result.replaceAll("%d", project.getBasedir().getPath());
-    return result;
   }
 
   private void write(String output) throws MojoExecutionException {
