@@ -4,6 +4,10 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.hypoport.milk.maven.plugin.utils.ChangeSetReader;
+import org.hypoport.milk.maven.plugin.utils.IteratableWriter;
+import org.hypoport.milk.maven.plugin.utils.ProjectMatcher;
+import org.hypoport.milk.maven.plugin.utils.ProjectPathExtractor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

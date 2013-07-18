@@ -1,6 +1,7 @@
 package org.hypoport.milk.maven.plugin;
 
 import org.apache.maven.project.MavenProject;
+import org.hypoport.milk.maven.plugin.utils.ProjectMatcher;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -63,7 +64,9 @@ public class ProjectMatcherTest_match_mutiple_Files {
 
   private MavenProject projectForPath(String path) {
     MavenProject artifact = mock(MavenProject.class);
-    given(artifact.getFile()).willReturn(new File(path));
+    File pom = new File(path);
+    given(artifact.getFile()).willReturn(pom);
+    given(artifact.getBasedir()).willReturn(pom.getParentFile());
     return artifact;
   }
 }

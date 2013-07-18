@@ -1,6 +1,4 @@
-package org.hypoport.milk.maven.plugin;
-
-import org.apache.maven.project.MavenProject;
+package org.hypoport.milk.maven.plugin.utils;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

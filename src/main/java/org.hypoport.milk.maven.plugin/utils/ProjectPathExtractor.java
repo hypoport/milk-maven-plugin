@@ -1,6 +1,7 @@
-package org.hypoport.milk.maven.plugin;
+package org.hypoport.milk.maven.plugin.utils;
 
 import org.apache.maven.project.MavenProject;
+import org.hypoport.milk.maven.plugin.utils.Transformer;
 
 import java.io.File;
 
@@ -12,10 +13,10 @@ public class ProjectPathExtractor implements Transformer<String, MavenProject> {
   }
 
   public String transform(MavenProject project) {
-    String path = project.getFile().getParent();
-    if (basedir.getPath().equals(path)) {
+    File path = project.getBasedir();
+    if (basedir.equals(path)) {
       return ".";
     }
-    return path.substring(this.basedir.getPath().length() + 1);
+    return path.getPath().substring(this.basedir.getPath().length() + 1);
   }
 }

@@ -1,4 +1,4 @@
-package org.hypoport.milk.maven.plugin;
+package org.hypoport.milk.maven.plugin.utils;
 
 public interface Transformer<To, From> {
 

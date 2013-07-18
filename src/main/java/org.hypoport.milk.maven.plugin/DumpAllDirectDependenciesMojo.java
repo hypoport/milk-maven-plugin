@@ -5,11 +5,15 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.hypoport.milk.maven.plugin.utils.DependencyComparator;
+import org.hypoport.milk.maven.plugin.utils.DependencyFormatter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @goal dump-all-direct-dependencies
@@ -41,20 +45,17 @@ public class DumpAllDirectDependenciesMojo extends AbstractMojo {
     if (delimiter == null) {
       delimiter = ",";
     }
+    Set<Dependency> dependencies = new TreeSet<Dependency>(new DependencyComparator());
     DependencyFormatter dependencyFormatter = new DependencyFormatter(pattern);
     for (MavenProject project : reactorProjects) {
-      output += addProjectDependencies(output, dependencyFormatter, project);
+      dependencies.addAll(project.getDependencies());
+    }
+    for (Dependency dependency : dependencies) {
+      output += delimiter + dependencyFormatter.formatDependency(dependency);
     }
     if (!output.isEmpty()) {
       write(output.substring(delimiter.length()));
     }
-  }
-
-  private String addProjectDependencies(String output, DependencyFormatter dependencyFormatter, MavenProject project) throws MojoExecutionException {
-    for (Dependency dependency : project.getDependencies()) {
-      output += delimiter + dependencyFormatter.formatDependency(dependency);
-    }
-    return output;
   }
 
   private void write(String output) throws MojoExecutionException {

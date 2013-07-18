@@ -1,4 +1,4 @@
-package org.hypoport.milk.maven.plugin;
+package org.hypoport.milk.maven.plugin.utils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,7 +14,7 @@ public class ChangeSetReader {
     this.reader = reader;
   }
 
-  List<String> read() throws IOException {
+  public List<String> read() throws IOException {
     ArrayList<String> changes = new ArrayList<String>();
     try {
       String line;
