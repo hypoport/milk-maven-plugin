@@ -37,7 +37,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Abstract base class for Versions Mojos.
@@ -47,7 +49,7 @@ import java.util.List;
  */
 public abstract class AbstractVersionsUpdaterMojo
     extends AbstractMojo {
-  protected final List<VersionChange> versionChanges = new ArrayList<VersionChange>();
+  protected final Set<VersionChange> versionChanges = new HashSet<VersionChange>();
   /**
    * @parameter default-value="${reactorProjects}"
    * @required
@@ -74,6 +76,7 @@ public abstract class AbstractVersionsUpdaterMojo
   protected void process(File outFile)
       throws MojoExecutionException, MojoFailureException {
     try {
+      getLog().info("processing " + outFile);
       StringBuilder input = PomHelper.readXmlFile(outFile);
       ModifiedPomXMLEventReader newPom = newModifiedPomXER(input);
 
@@ -84,10 +87,10 @@ public abstract class AbstractVersionsUpdaterMojo
       }
     }
     catch (IOException e) {
-      getLog().error(e);
+      getLog().error("IOException during processing of "+outFile, e);
     }
     catch (XMLStreamException e) {
-      getLog().error(e);
+      getLog().error("XMLStreamException during processing of "+outFile, e);
     }
   }
 
@@ -105,7 +108,7 @@ public abstract class AbstractVersionsUpdaterMojo
       newPom = new ModifiedPomXMLEventReader(input, inputFactory);
     }
     catch (XMLStreamException e) {
-      getLog().error(e);
+      getLog().error("XMLStreamException during processing of "+input, e);
     }
     return newPom;
   }
@@ -133,6 +136,7 @@ public abstract class AbstractVersionsUpdaterMojo
       final VersionChanger changer = createVersionChanger(pom);
 
       for (VersionChange change : versionChanges) {
+        getLog().info("processing " + change);
         changer.apply(change);
       }
     }

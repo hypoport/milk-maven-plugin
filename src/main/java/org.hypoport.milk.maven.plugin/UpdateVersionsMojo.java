@@ -58,7 +58,9 @@ public class UpdateVersionsMojo
       throws MojoExecutionException, MojoFailureException {
 
     for (MavenProject project : reactorProjects) {
-      versionChanges.add(new VersionChange(project.getGroupId(), project.getArtifactId(), "", newVersion));
+      VersionChange versionChange = new VersionChange(project.getGroupId(), project.getArtifactId(), "", newVersion);
+      getLog().info("adding " + versionChange +" to versionChanges");
+      versionChanges.add(versionChange);
     }
     process();
   }

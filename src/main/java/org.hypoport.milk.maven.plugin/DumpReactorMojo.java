@@ -55,14 +55,24 @@ public class DumpReactorMojo extends AbstractMojo {
       getLog().info("reactor-dump: " + output);
     }
     else {
-      FileWriter writer;
+      FileWriter writer = null;
       try {
         writer = new FileWriter(outputFile);
         writer.write(output);
-        writer.close();
+
       }
       catch (IOException e) {
         throw new MojoExecutionException(e.getMessage(), e);
+      }
+      finally {
+        if (writer!=null) {
+          try {
+            writer.close();
+          }
+          catch (IOException e) {
+            getLog().error("could not close "+outputFile, e);
+          }
+        }
       }
     }
   }
